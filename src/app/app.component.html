@@ -1,29 +1,37 @@
 <mat-toolbar>
-    <mat-icon>landscape</mat-icon>
+    <mat-icon style="padding: 7px;">landscape</mat-icon>
     <span>Mount St. Helens</span>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
     
     <mat-sidenav mode="side" opened>
-        <mat-card>
-            <mat-card-title>Threshold</mat-card-title>
-            <mat-card-content>
-                <mat-slider></mat-slider>
-            </mat-card-content>
-        </mat-card>
-        <mat-card>
-            <mat-card-title>Longitude</mat-card-title>
-            <mat-card-content>
-                <mat-slider></mat-slider>
-            </mat-card-content>
-        </mat-card>
-        <mat-card>
-            <mat-card-title>Latitude</mat-card-title>
-            <mat-card-content>
-                <mat-slider></mat-slider>
-            </mat-card-content>
-        </mat-card>
+        <form [formGroup]="sliderForm">
+            <mat-card>
+                <span>Threshold</span>
+                <mat-card-content>
+                    <div class="custom-slider">
+                        <ngx-slider formControlName="thrSliderControl" [options]="thresholdOptions"></ngx-slider>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <span>Longitude</span>
+                <mat-card-content>
+                    <div class="custom-slider">
+                        <ngx-slider formControlName="lonSliderControl" [options]="sliderOptions"></ngx-slider>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <span>Latitude</span>
+                <mat-card-content>
+                    <div class="custom-slider">
+                        <ngx-slider formControlName="latSliderControl" [options]="sliderOptions"></ngx-slider>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </form>
     </mat-sidenav>
     
     <mat-sidenav-content>
