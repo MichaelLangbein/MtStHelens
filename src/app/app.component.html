@@ -1,47 +1,14 @@
 <mat-toolbar>
-    <mat-icon style="padding: 7px;">landscape</mat-icon>
-    <span>Mount St. Helens</span>
+        <mat-icon style="padding: 7px;">landscape</mat-icon>
+        <span>Mount St. Helens</span>
+
+        <mat-button-toggle-group appearance="legacy" style="margin-left: 20px;">
+            <mat-button-toggle [routerLink]="['/js']">JS</mat-button-toggle>
+            <mat-button-toggle [routerLink]="['/wasm']">WASM</mat-button-toggle>
+        </mat-button-toggle-group>
+
 </mat-toolbar>
 
-<mat-sidenav-container class="sidenav-container">
-    
-    <mat-sidenav mode="side" opened>
-        <form [formGroup]="sliderForm">
-            <mat-card>
-                <span>Threshold</span>
-                <mat-card-content>
-                    <div class="custom-slider">
-                        <ngx-slider formControlName="thrSliderControl" [options]="thresholdOptions"></ngx-slider>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-            <mat-card>
-                <span>Longitude</span>
-                <mat-card-content>
-                    <div class="custom-slider">
-                        <ngx-slider formControlName="lonSliderControl" [options]="sliderOptions"></ngx-slider>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-            <mat-card>
-                <span>Latitude</span>
-                <mat-card-content>
-                    <div class="custom-slider">
-                        <ngx-slider formControlName="latSliderControl" [options]="sliderOptions"></ngx-slider>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-        </form>
-    </mat-sidenav>
-    
-    <mat-sidenav-content>
-        <mat-grid-list cols="1" rowHeight="2:1">
-            <mat-grid-tile>
-                <canvas #canvas id="canvas" class="canvas"></canvas>
-            </mat-grid-tile>
-        </mat-grid-list>
-    </mat-sidenav-content>
-
-</mat-sidenav-container>
 
 
+<router-outlet></router-outlet>

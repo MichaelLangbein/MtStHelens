@@ -1,0 +1,53 @@
+<mat-sidenav-container class="sidenav-container">
+    
+    <mat-sidenav mode="side" opened>
+            <form [formGroup]="sliderForm">
+            
+                    <mat-card>
+                        <span> <mat-icon>filter_alt</mat-icon> Threshold</span>
+                        <mat-card-content>                            
+                            <div class="custom-slider">
+                                <ngx-slider formControlName="thrSliderControl" [options]="thresholdOptions"></ngx-slider>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card>
+                        <span> <mat-icon>swap_vert</mat-icon> Longitude</span>
+                        <mat-card-content>                            
+                            <div class="custom-slider">
+                                <ngx-slider formControlName="lonSliderControl" [options]="sliderOptions"></ngx-slider>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card>
+                        <span> <mat-icon>swap_horiz</mat-icon> Latitude</span>
+                        <mat-card-content>                            
+                            <div class="custom-slider">
+                                <ngx-slider formControlName="latSliderControl" [options]="sliderOptions"></ngx-slider>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-divider></mat-divider>
+
+                    <mat-card>
+                        <span> <mat-icon>watch</mat-icon> Framerate</span>
+                        <mat-card-content>                            
+                            <div #fpsContainer id="fpsContainer" class="fpsContainer"></div>
+                        </mat-card-content>
+                    </mat-card>
+    
+            </form>
+    </mat-sidenav>
+    
+    <mat-sidenav-content>
+        <mat-grid-list cols="1" rowHeight="2:1">
+            <mat-grid-tile>
+                <canvas #canvas id="canvas" class="canvas"></canvas>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -9,12 +9,20 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatListModule } from '@angular/material/list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MtStHelensWasmComponent } from './mt-st-helens-wasm/mt-st-helens-wasm.component';
+import { MtStHelensJsComponent } from './mt-st-helens-js/mt-st-helens-js.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MtStHelensWasmComponent,
+    MtStHelensJsComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +34,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatCardModule,
     MatSliderModule,
     NgxSliderModule,
-    ReactiveFormsModule
+    MatListModule,
+    MatFormFieldModule,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

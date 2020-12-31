@@ -7,7 +7,7 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Collada, ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
 import { ArrayCube } from './utils/arrayMatrix';
-import { BlockContainer, createMarchingCubeBlockMeshes, fetchWasm, MarchingCubeService } from './marchingCubes/marchingCubes';
+import { BlockContainer, createMarchingCubeBlockMeshes } from './marchingCubes/marchingCubesJs';
 import perlinNoise3d from 'perlin-noise-3d';
 import * as Stats from 'stats-js';
 
@@ -82,78 +82,81 @@ export class RenderingService {
         });
 
 
-        fetchWasm().subscribe((svc: MarchingCubeService) => {
+        const noise = new perlinNoise3d();
+        noise.noiseSeed(Math.E);
 
+        function spaceFunction(x: number, y: number, z: number, maxVal: number): number {
+            const noiseVal = maxVal * (
+                0.3 * noise.get((8*x)/X, (8*y)/Y, (8*z)/Z) +
+                0.4 * noise.get((4*x)/X, (4*y)/Y, (4*z)/Z) +
+                0.2 * noise.get((2*x)/X, (2*y)/Y, (2*z)/Z) +
+                0.1 * noise.get(x/(1*X), y/(1*Y), z/(1*Z)) +
+                0.0 * noise.get(x/(2*X), y/(2*Y), z/(2*Z)) +
+                0.0 * noise.get(x/(4*X), y/(4*Y), z/(4*Z))
+            );
+            const proximityX = 1 - (Math.abs(x - X / 2) / (X / 2));
+            const proximityY = 1 - (Math.abs(y - Y*0.9) / (Y*0.9));
+            const proximityZ = 1 - (Math.abs(z - Z / 2) / (Z / 2));
+            const val = noiseVal * proximityX * Math.pow(proximityY, 1.55) * Math.pow(proximityZ, 1.5);
+            return val;
+        }
 
-            const noise = new perlinNoise3d();
-            noise.noiseSeed(Math.E);
-
-            function spaceFunction(x: number, y: number, z: number, maxVal: number): number {
-                const noiseVal = maxVal * (
-                    0.3 * noise.get((8*x)/X, (8*y)/Y, (8*z)/Z) +
-                    0.4 * noise.get((4*x)/X, (4*y)/Y, (4*z)/Z) +
-                    0.2 * noise.get((2*x)/X, (2*y)/Y, (2*z)/Z) +
-                    0.1 * noise.get(x/(1*X), y/(1*Y), z/(1*Z)) +
-                    0.0 * noise.get(x/(2*X), y/(2*Y), z/(2*Z)) +
-                    0.0 * noise.get(x/(4*X), y/(4*Y), z/(4*Z))
-                );
-                const proximityX = 1 - (Math.abs(x - X / 2) / (X / 2));
-                const proximityY = 1 - (Math.abs(y - Y*0.9) / (Y*0.9));
-                const proximityZ = 1 - (Math.abs(z - Z / 2) / (Z / 2));
-                const val = noiseVal * proximityX * Math.pow(proximityY, 1.55) * Math.pow(proximityZ, 1.5);
-                return val;
-            }
-
-            const maxVal = 100;
-            const X = 150;
-            const Y = 80;
-            const Z = 150;
-            const allData = new ArrayCube(X, Y, Z);
-            for (let x = 0; x < X; x++) {
-                for (let y = 0; y < Y; y++) {
-                    for (let z = 0; z < Z; z++) {
-                        if (x !== 0 && y !== 0 && z !== 0 && x !== X - 1 && y !== Y - 1 && z !== Z - 1) {
-                            allData.set(x, y, z, spaceFunction(x, y, z, maxVal));
-                        } else {
-                            allData.set(x, y, z, 0);
-                        }
+        const maxVal = 100;
+        const X = 150;
+        const Y = 80;
+        const Z = 150;
+        const allData = new ArrayCube(X, Y, Z);
+        for (let x = 0; x < X; x++) {
+            for (let y = 0; y < Y; y++) {
+                for (let z = 0; z < Z; z++) {
+                    if (x !== 0 && y !== 0 && z !== 0 && x !== X - 1 && y !== Y - 1 && z !== Z - 1) {
+                        allData.set(x, y, z, spaceFunction(x, y, z, maxVal));
+                    } else {
+                        allData.set(x, y, z, 0);
                     }
                 }
             }
-            const threshold = 20;
+        }
+        const threshold = 20;
 
-            const cubeSize: [number, number, number] = [1.25, 1.25, 1.25];
-            const blockSize: [number, number, number] = [100, 100, 100];
+        const cubeSize: [number, number, number] = [1.25, 1.25, 1.25];
+        const blockSize: [number, number, number] = [100, 100, 100];
 
+        const colorFunc = (val: number): [number, number, number] => {
+            const perc = val/100;
+            const r = perc;
+            const g = 1 - perc;
+            return [r, g, 0];
+        };
 
-            const meshes = createMarchingCubeBlockMeshes(allData, threshold, cubeSize, blockSize, 0, 30, svc);
-            meshes.map(m => m.mesh.translateX(- cubeSize[0] * X / 2));
-            meshes.map(m => m.mesh.translateY(- cubeSize[1] * Y / 2));
-            meshes.map(m => m.mesh.translateZ(- cubeSize[2] * Z / 2));
-            meshes.map((m, i) => m.mesh.name = `mesh${i}`);
-            meshes.map(m => scene.add(m.mesh));
-
-
-
-            const planeGeom = new PlaneGeometry(Z, Y);
-            const planeMaterial = new MeshBasicMaterial({
-                color: '#4400f2',
-                side: DoubleSide,
-                transparent: true,
-                opacity: 0.5
-            });
-            const cutPlane = new Mesh(planeGeom, planeMaterial);
-            cutPlane.position.setX(- cubeSize * X / 2);
-            cutPlane.lookAt(-1, 0, 0);
-            cutPlane.name = 'cutPlane';
-            scene.add(cutPlane);
+        const meshes = createMarchingCubeBlockMeshes(allData, threshold, cubeSize[0], blockSize, colorFunc);
+        meshes.map(m => m.mesh.translateX(- cubeSize[0] * X / 2));
+        meshes.map(m => m.mesh.translateY(- cubeSize[1] * Y / 2));
+        meshes.map(m => m.mesh.translateZ(- cubeSize[2] * Z / 2));
+        meshes.map((m, i) => m.mesh.name = `mesh${i}`);
+        meshes.map(m => scene.add(m.mesh));
 
 
-            this.allData = allData;
-            this.meshes = meshes;
-            this.cubeSize = cubeSize;
-            this.blockSize = blockSize;
+
+        const planeGeom = new PlaneGeometry(Z, Y);
+        const planeMaterial = new MeshBasicMaterial({
+            color: '#4400f2',
+            side: DoubleSide,
+            transparent: true,
+            opacity: 0.5
         });
+        const cutPlane = new Mesh(planeGeom, planeMaterial);
+        cutPlane.position.setX(- cubeSize * X / 2);
+        cutPlane.lookAt(-1, 0, 0);
+        cutPlane.name = 'cutPlane';
+        scene.add(cutPlane);
+
+
+        this.allData = allData;
+        this.meshes = meshes;
+        this.cubeSize = cubeSize;
+        this.blockSize = blockSize;
+    
 
 
         this.scene = scene;
@@ -208,7 +211,7 @@ export class RenderingService {
                         }
                     }
                 }
-                mesh.updateData(newData.data);
+                mesh.updateData(newData);
                 // mesh.updateThreshold(threshold);
             } else {
                 mesh.mesh.visible = false;
