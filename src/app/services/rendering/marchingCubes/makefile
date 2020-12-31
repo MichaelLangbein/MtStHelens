@@ -13,4 +13,4 @@ wasm: main.c
 	clang $(WASM_COMPILE_FLAGS) -o main.wasm main.c
 
 deploy: wasm
-	mv main.wasm ../../../assets/marchingCubes.wasm
+	mv main.wasm ../../../../assets/marchingCubes.wasm
