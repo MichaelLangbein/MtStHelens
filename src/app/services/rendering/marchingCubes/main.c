@@ -557,8 +557,8 @@ int mapColors(float* data, int X, int Y, int Z,
         float val = getMeanValInDirection(data, X, Y, Z, sizeX, sizeY, sizeZ, x0, y0, z0, v, n);
         float percentage = (val - minVal) / (maxVal - minVal);
         float r = percentage;
-        float g = (1.0 - percentage);
-        float b = 0.0;
+        float g = percentage;
+        float b = percentage;
         Vertex color = {r, g, b};
         colors[i] = color;
     }

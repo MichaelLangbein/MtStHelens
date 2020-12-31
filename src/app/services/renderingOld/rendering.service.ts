@@ -125,8 +125,9 @@ export class RenderingService {
         const colorFunc = (val: number): [number, number, number] => {
             const perc = val/100;
             const r = perc;
-            const g = 1 - perc;
-            return [r, g, 0];
+            const g = perc;
+            const b = perc;
+            return [r, g, b];
         };
 
         const meshes = createMarchingCubeBlockMeshes(allData, threshold, cubeSize[0], blockSize, colorFunc);

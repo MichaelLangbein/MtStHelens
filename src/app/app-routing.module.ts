@@ -7,6 +7,11 @@ import { MtStHelensWasmComponent } from './mt-st-helens-wasm/mt-st-helens-wasm.c
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/js',
+    pathMatch: 'full'
+  },
+  {
     path: 'wasm',
     component: MtStHelensWasmComponent
   }, 
