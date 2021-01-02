@@ -1,0 +1,40 @@
+<mat-sidenav-container class="sidenav-container">
+    
+    <mat-sidenav mode="side" opened>
+
+        <mat-card>
+            <form [formGroup]="sliderForm">
+                <mat-form-field>
+                    <mat-label>Nr X</mat-label>
+                    <input type="number" matInput formControlName="xControl" value="100">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Nr Y</mat-label>
+                    <input type="number" matInput formControlName="yControl" value="100">
+                </mat-form-field>
+
+                <button mat-stroked-button color="primary" (click)="submit()">Update</button>
+            </form>
+        </mat-card>
+            
+        <mat-divider></mat-divider>
+
+        <mat-card>
+            <span> <mat-icon>watch</mat-icon> Framerate</span>
+            <mat-card-content>                            
+                <div #fpsContainer id="fpsContainer" class="fpsContainer"></div>
+            </mat-card-content>
+        </mat-card>
+
+    </mat-sidenav>
+    
+    <mat-sidenav-content>
+        <mat-grid-list cols="1" rowHeight="2:1">
+            <mat-grid-tile>
+                <div #map id="map" class="map"></div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

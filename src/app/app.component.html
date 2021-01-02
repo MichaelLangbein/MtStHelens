@@ -1,11 +1,20 @@
 <mat-toolbar>
-        <mat-icon style="padding: 7px;">landscape</mat-icon>
-        <span>Mount St. Helens</span>
+    <mat-icon style="padding: 7px;">map</mat-icon>
+    <span>Polygons</span>
 
-        <mat-button-toggle-group appearance="legacy" style="margin-left: 20px;">
-            <mat-button-toggle [routerLink]="['/js']">JS</mat-button-toggle>
-            <mat-button-toggle [routerLink]="['/wasm']">WASM</mat-button-toggle>
-        </mat-button-toggle-group>
+    <mat-button-toggle-group appearance="legacy" style="margin-left: 20px;">
+        <mat-button-toggle [routerLink]="['/polygonJs']">JS</mat-button-toggle>
+        <mat-button-toggle [routerLink]="['/polygonWebGL']">WebGL</mat-button-toggle>
+    </mat-button-toggle-group>
+
+
+    <mat-icon style="padding: 7px;">landscape</mat-icon>
+    <span>Mount St. Helens</span>
+
+    <mat-button-toggle-group appearance="legacy" style="margin-left: 20px;">
+        <mat-button-toggle [routerLink]="['/js']">JS</mat-button-toggle>
+        <mat-button-toggle [routerLink]="['/wasm']">WASM</mat-button-toggle>
+    </mat-button-toggle-group>
 
 </mat-toolbar>
 
