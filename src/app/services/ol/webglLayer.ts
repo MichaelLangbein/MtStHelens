@@ -13,6 +13,7 @@ import MultiPolygon from 'ol/geom/MultiPolygon';
 
 import earcut from 'earcut';
 import VectorSource from "ol/source/Vector";
+import { ArrayMatrixF32 } from "./rendering/utils/arrayMatrix";
 
 
 
@@ -83,10 +84,10 @@ export function parseFeaturesToRendererData(
         }
     }
 
-    const coordAttr = new AttributeData(coords.flat(), 'vec2', false);
-    const colorsAttr = new AttributeData(colors.flat(), 'vec3', false);
-    const polyIndex = new Index(polygonIndices.flat());
-    const lineIndex = new Index(lineIndices.flat());
+    const coordAttr = new AttributeData(new Float32Array(coords.flat()), 'vec2', false);
+    const colorsAttr = new AttributeData(new Float32Array(colors.flat()), 'vec3', false);
+    const polyIndex = new Index(new Uint32Array(polygonIndices.flat()));
+    const lineIndex = new Index(new Uint32Array(lineIndices.flat()));
 
     return {
         colors: colorsAttr,
