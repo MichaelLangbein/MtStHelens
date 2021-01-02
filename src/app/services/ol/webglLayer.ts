@@ -13,7 +13,6 @@ import MultiPolygon from 'ol/geom/MultiPolygon';
 
 import earcut from 'earcut';
 import VectorSource from "ol/source/Vector";
-import { ArrayMatrixF32 } from "./rendering/utils/arrayMatrix";
 
 
 
